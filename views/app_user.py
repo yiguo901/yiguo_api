@@ -26,7 +26,7 @@ def user_regist():
     api_logger.debug(req_data)
 
     # 验证上传的必须的数据是否存在
-    if all((req_data.get('login_name', False),
+    if all((req_data.get('user_name', False),
             req_data.get('login_auth_str', False))):
 
         req_data['create_time'] = datetime.now().strftime('%Y-%m-%d')
