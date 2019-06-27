@@ -14,16 +14,23 @@ def home_view():
 	img_chosen_datas = dao.query('ygchosen',page=3)
 	
 	
-	
-	
-	
-	
 	return jsonify({
 		'code': 8000,
 		'msg': 'ok',
 		'data_wheel': img_wheel_datas,
 		'data_nav': img_nav_datas,
 		'data_chosen': img_chosen_datas,
+	})
+@blue_home.route('/home/eat/', methods=("GET",))
+def eat_view():
+	dao = UserDao()
+	img_eat_datas = dao.query_all('ygeat',('id','eat_img','eat_content ','eat_time'))
+	print(img_eat_datas)
+	return jsonify({
+		'code': 8000,
+		'msg': 'ok',
+		'data_wheel': img_eat_datas,
+		
 	})
 	
 if __name__ == '__main__':
