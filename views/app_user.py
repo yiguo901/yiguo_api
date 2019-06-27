@@ -8,6 +8,7 @@ blue = Blueprint('user_api', __name__)
 from datetime import datetime
 from libs import cache
 
+
 @blue.route('/regist/', methods=('POST',))
 def user_regist():
     # 前端请求的Content-Type: application/json

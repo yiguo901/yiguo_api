@@ -25,7 +25,8 @@ def home_view():
 		'data_nav': img_nav_datas,
 		'data_chosen': img_chosen_datas,
 	})
-	
+
+
 if __name__ == '__main__':
 	dao = UserDao()
 	img = dao.query('ygwheel','id','img')

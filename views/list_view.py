@@ -11,13 +11,12 @@ def home_view():
 	dao = UserDao()
 	img_data = dao.query('ygwheel', ('id', 'img'))
 	
-	
-	
+
 	return jsonify({
 		'code': 8000,
 		'msg': 'ok',
 		'data_img': img_data,
-		'data_wheel':img_data
+		'data_wheel': img_data
 	})
 
 
