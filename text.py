@@ -1,2 +1,3 @@
-sql = '%s %s'%(('1,2'),3)
-print(sql)
+s = 'sf#fjp#'
+t = s.split('#')
+print(t)

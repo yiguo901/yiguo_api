@@ -2,8 +2,8 @@ from apps import app
 from views import home_view, cart_view
 from flask_cors import CORS
 APP_CONFIG={
-    'host': '0.0.0.0',
-    'port': 8003,
+    'host': 'localhost',
+    'port': 5000,
     'debug': True
 }
 if __name__ == '__main__':
