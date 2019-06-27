@@ -13,11 +13,12 @@ blue = Blueprint("userblue",__name__)
 
 @blue.route('/msgcode/',methods=['POST'])
 def send_msg(): # 发送短信验证码
-    u_phone = request.args.get('u_phone')
+    u_phone = request.form.get('u_phone')
+    print(u_phone)
     code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
     send_sms_code(u_phone, code)
     try:
-        rd.setex('msg'+u_phone,code,120)  # 保存到redis缓存
+        rd.setex(u_phone,code,120)  # 保存到redis缓存
     except Exception as e:
         api_logger.error(e)
         return jsonify({'code':802,'msg':'短信验证码保存失败'})
