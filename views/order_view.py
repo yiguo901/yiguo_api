@@ -1,12 +1,17 @@
 from flask import Blueprint, request, jsonify
 
+from cart_dao.cartdao import cart_dao
 from libs import cache
 
-blue_order = Blueprint('order_api',__name__)
+blue_order = Blueprint("order_api", __name__)
 
 
-@blue_order('/order/',methods=('POST',))
-def order_view():
+@blue_order.route('/order/', methods=('POST',))
+def add_order():
+
+    dao = cart_dao()
+    data = dao.query('wheel')
+    print(data)
     # 验证登录
     token = request.args.get('token', None)
     if token is None:
