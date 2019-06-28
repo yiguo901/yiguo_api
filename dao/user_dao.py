@@ -6,7 +6,7 @@ from services.sms_check import check_sms
 
 class UserDao(BaseDao):
 
-    def save(self,table_name,**values):
+    def save(self,**values):
         api_logger.info('db replace users:<%s>' % values['u_phone'])
         values['u_auth_string'] = make_password(values['u_auth_string'])
         return super(UserDao,self).save('users',**values)
