@@ -14,7 +14,6 @@ def home_view():
 	img_wheel_datas = dao.query_all('wheel')
 	img_nav_datas = dao.query_all('nav')
 	img_chosen_datas = dao.query_all('chosen')
-
 	# 查询导航的数据
 	# 导航详情列表
 	for img_chosen_data in img_chosen_datas:
@@ -33,12 +32,8 @@ def home_view():
 		for nav_type_list in nav_type_lists:
 			img_group = nav_type_list['goods_wheel_img'].split('#')
 			nav_type_list['goods_wheel_img'] = img_group[0]
-	
 		nav_type_detail['imglist'] = nav_type_lists
 		
-
-	
-	
 	return jsonify({
 		'code': 8000,
 		'msg': 'ok',
@@ -49,17 +44,8 @@ def home_view():
 		# 'goodlist':goodlist,
 	})
 
-@blue_home.route('/home/index/<child_id>/',methods=("GET",))
-#导航类列表表详情
-def nav_view(child_id):
-	dao = home_dao()
-
-
-
-
-
 @blue_home.route('/home/index/<child_id>/', methods=("GET",))
-
+#导航类列表表详情
 def nav_list_view(child_id):
 	dao = home_dao()
 	nav_datas = dao.query_group('goods', child_id)
@@ -74,7 +60,6 @@ def nav_list_view(child_id):
 	
 	})
 
-
 @blue_home.route('/home/eat/', methods=("GET",))
 # 吃饭吧详情
 def eat_view():
@@ -86,7 +71,6 @@ def eat_view():
 	    'data_wheel': img_eat_datas,
 	
 	})
-
 
 @blue_home.route('/detail/<child_id>/', methods=("GET",))
 # 商品详情页面
@@ -100,9 +84,7 @@ def detail_view(child_id):
 	    'code': 8000,
 	    'msg': 'ok',
 	    'data_wheel': detail_datas,
-	
 	})
-
 
 @blue_home.route('/detail/img/<string:id>/', methods=("GET",))
 # 商品图片详情页面
@@ -114,7 +96,6 @@ def detail_img_view(id):
 	    'code': 8000,
 	    'msg': 'ok',
 	    'data_wheel': detail_datas,
-	
 	})
 
 
@@ -122,7 +103,6 @@ def detail_img_view(id):
 def type_view(num='1001'):
 	dao = home_dao()
 	type_datas = dao.query_type()
-	
 	if num == '1001':
 		type_category_id = type_datas[0]['category_id']
 		type_detail_datas = dao.query_group_all('goods', type_category_id)
@@ -134,15 +114,12 @@ def type_view(num='1001'):
 		for type_detail_data in type_detail_datas:
 			img = type_detail_data['goods_wheel_img'].split('#')
 			type_detail_data['goods_wheel_img'] = img[0]
-
-	print(type_datas)
 	
 	return jsonify({
 	    'code': 8000,
 	    'msg': 'ok',
 	    'data_wheel': type_datas,
 	    'type_detail_datas': type_detail_datas
-	
 	})
 
 
