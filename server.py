@@ -2,7 +2,7 @@ from apps import app
 from views import home_view, cart_view,user_view
 from flask_cors import CORS
 APP_CONFIG={
-    'host': 'localhost',
+    'host': '0.0.0.0',
     'port': 5000,
     'debug': True
 }
