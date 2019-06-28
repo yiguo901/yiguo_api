@@ -99,8 +99,8 @@ def detail_view(child_id):
 	})
 
 
-@blue_home.route('/detail/img/<str:id>/', methods=("GET",))
-def detail_view(id):
+@blue_home.route('/detail/img/<string:id>/', methods=("GET",))
+def detail_img_view(id):
 	dao = home_dao()
 	detail_datas = dao.query_limit(('detail_img_url'), 'goods', page=1)
 	return jsonify({
