@@ -37,8 +37,7 @@ def home_view():
 	
 		nav_type_detail['imglist'] = nav_type_lists
 		
-		
-	print("&&&&&&&&&&",nav_type_details)
+
 	
 	
 	return jsonify({
