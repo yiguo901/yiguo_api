@@ -8,9 +8,13 @@ DB_CONFIG = {
 
     "host":"localhost",
     "port":3306,
-    "user":"ygadmin",
-    "password":"yg1176",
-    "db":"yg_api_db",
+    # "user":"ygadmin",
+    # "password":"yg1176",
+    # "db":"yg_api_db",
+    # "charset":"utf8"
+    "user":"root",
+    "password":"123456",
+    "db":"yiguo",
     "charset":"utf8"
 
 }
