@@ -1,3 +1,4 @@
-s = 'sf#fjp#'
-t = s.split('#')
+print('\'苹果\'')
+s = '苹果'
+t = '\''+s +'\''
 print(t)

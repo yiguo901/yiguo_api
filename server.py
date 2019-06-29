@@ -3,7 +3,7 @@ from apps import app
 from flask_cors import CORS
 APP_CONFIG={
     'host': '0.0.0.0',
-    'port': 5000,
+    'port': 8003,
     'debug': True
 }
 if __name__ == '__main__':
