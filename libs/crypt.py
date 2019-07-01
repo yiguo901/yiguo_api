@@ -6,9 +6,7 @@ def make_password(passwd_str):
 
 
 def check_password(passwd_str, encrypted_str):
-    print('passwoedjiami')
     return make_password(passwd_str) == encrypted_str
 
 if __name__ == '__main__':
     mima = make_password("123456")
-    print(mima)

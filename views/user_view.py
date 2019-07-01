@@ -12,13 +12,9 @@ blue = Blueprint("userblue",__name__)
 @blue.route('/msgcode/',methods=['POST'])
 def send_msg():
     resp = eval(request.get_data().decode())
-    print(resp,"++")
     u_phone = resp.get('u_phone')
-    print(u_phone,"---------")
     code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
-    print(code,"~~~~~~~~~~~~~~~~~``")
     res = eval(send_sms_code(u_phone, code).decode())
-    print(res,"!!!!!!!!!!!!11")
     if res['Code'] == 'OK':
         try:
             rd.setex(u_phone,code,120)  # 保存到redis缓存
@@ -132,10 +128,11 @@ def forget_pwd():
         })
 
 #账户管理
-@blue.route('/change/',method=['POST'])
+@blue.route('/change/',methods=['POST'])
 def userchange():
     api_logger.debug('user change get action')
     token = request.args.get('token')
+    print(token)
 
 
 
