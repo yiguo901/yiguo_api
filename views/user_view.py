@@ -132,7 +132,7 @@ def forget_pwd():
         })
 
 #账户管理
-@blue.route('/change/',method=['POST'])
+@blue.route('/change/',methods=['POST'])
 def userchange():
     api_logger.debug('user change get action')
     token = request.args.get('token')
