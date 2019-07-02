@@ -44,17 +44,16 @@ def home_view():
 		
 	})
 
-@blue_home.route('/home/index/<child_id>/', methods=("GET",))
+@blue_home.route('/home/index/<category_id>/', methods=("GET",))
 #导航类列表表详情
-def nav_list_view(child_id):
+def nav_list_view(category_id):
 	dao = home_dao()
-	nav_datas = dao.query_group(child_id,('name','detail_name','goods_img','price','marketprice','goods_img'))
-	
+	nav_datas = dao.query_group(category_id,('name','detail_name','price','marketprice','goods_img'))
 
 	return jsonify({
 	    'code': 8000,
 	    'msg': 'ok',
-	    'data_wheel': nav_datas,
+	    'data_nav': nav_datas,
 	
 	})
 
@@ -62,11 +61,14 @@ def nav_list_view(child_id):
 # 吃饭吧详情
 def eat_view():
 	dao = home_dao()
-	img_eat_datas = dao.query_all('ygeat')
+	bigimg_eat_datas = dao.query_eat()
+	img_eat_datas = dao.query_eat_limit()
+	
 	return jsonify({
 	    'code': 8000,
 	    'msg': 'ok',
-	    'data_wheel': img_eat_datas,
+	    'data_wheel': bigimg_eat_datas,
+		'img_eat_datas':img_eat_datas
 	
 	})
 
@@ -115,7 +117,7 @@ def type_view(category_id):
 	return jsonify({
 	    'code': 8000,
 	    'msg': 'ok',
-	    # 'data_wheel': type_datas,
+
 	    'type_detail_datas': type_detail_datas,
 		'child_type_detail':child_type_detail
 	})

@@ -3,10 +3,15 @@ from dao import BaseDao
 
 class home_dao(BaseDao):
 	
-	def query_eat(self,table):
-		sql = 'select * from %s'
-		data = self.query(sql, table)
+	def query_eat(self,):
+		sql = 'select eat_content, eat_img from ygeat where id<53 '
+		data = self.query(sql)
 		return data
+	def query_eat_limit(self):
+		sql = 'select eat_content, eat_img, eat_time  from ygeat  where id>53 '
+		data = self.query(sql)
+		return data
+		
 	
 	def query_all(self, table):
 		sql = 'select * from %s' % (table)
@@ -80,7 +85,7 @@ class home_dao(BaseDao):
 			c.execute(sql)
 			data = c.fetchall()
 			return data
-		
+	
 		
 		
 		

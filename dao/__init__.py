@@ -4,19 +4,19 @@ from logger import api_logger
 
 
 DB_CONFIG = {
+    "port": 3306,
+    
+    "host": "121.199.63.71",
+    "user": "ygadmin",
+    "password": "yg1176",
+    "db": "yg_api_db",
+    "charset": "utf8"
 
-
-    "host":"localhost",
-    "port":3306,
-    # "user":"ygadmin",
-    # "password":"yg1176",
-    # "db":"yg_api_db",
+    # "host":"localhost",
+    # "user":"root",
+    # "password":"123456",
+    # "db":"yiguo",
     # "charset":"utf8"
-    "user":"root",
-    "password":"123456",
-    "db":"yiguo",
-    "charset":"utf8"
-
 }
 
 
@@ -70,21 +70,7 @@ class BaseDao():
             api_logger.info('select %s ok!' % sql)
             return result
 
-    def count(self,table_name):
-        pass
-
     
-    # def query(self, table, *fields, page=1):
-    #     if not len(fields):
-    #         sql = 'select * from %s limit %s' % (table, page)
-    #     else:
-    #         sql = 'select %s from %s limit %s' % (','.join(fields), table,page)
-    #
-    #     print(sql)
-    #     with self.db as c:
-    #         c.execute(sql)
-    #         data = c.fetchall()
-    #     return data
     
     def query(self, sql, *args):
         with self.db as c:
