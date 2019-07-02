@@ -67,9 +67,14 @@ class UserDao(BaseDao):
         user_data = {'u_phone': u_phone,
                      'nickname': 'YG'+u_phone,
                      'u_auth_string': '123456',
-                     'is_active': 1
+                     'is_active': 1,
+                     'is_delete': 0,
                      }
         if self.save(**user_data):
             user_profile = self.user_list('u_phone',u_phone)
             return user_profile[0]
         return {'code': 300, 'msg': '插入数据失败, 可能存在某一些字段没有给定值'}
+
+if __name__ == '__main__':
+    xq = UserDao.get_profile(id = 1)
+    print(xq)

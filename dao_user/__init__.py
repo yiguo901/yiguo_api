@@ -6,9 +6,9 @@ from logger import api_logger
 DB_CONFIG = {
     "host":"localhost",
     "port":3306,
-    "user":"ygadmin",
-    "password":"yg1176",
-    "db":"yg_api_db",
+    "user":"root",
+    "password":"123456",
+    "db":"yiguo",
     "charset":"utf8"
 }
 
@@ -37,15 +37,17 @@ class BaseDao():
     def __init__(self):
         self.db = DB()
 
-    def save(self,table_name,**values):
+    def save(self, table_name, **values):
         sql = 'insert into %s(%s) values(%s)' % \
               (table_name,
                ','.join(values.keys()),
                ','.join(['%%(%s)s' % key for key in values.keys()])
                )
+        print("sql",sql)
         success = False
         with self.db as c:
-            c.execute(sql,args=values)
+
+            c.execute(sql, args=values)
             api_logger.info('%s ok!' % sql)
             success = True
         return success

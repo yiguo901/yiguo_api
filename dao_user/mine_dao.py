@@ -16,7 +16,7 @@ class MineDao(BaseDao):
 
     def mine_query(self):
         try:
-            main_banner_data = self.list('main_banner', ('id', 'image_url'), page=1, page_size=6)
+            balance = self.list('balance', ('id', 'balance'),)
             combat_courses = self.list('courses', ('course_id', 'name', 'degree','img_url', 'price', 'study_num'),
                                        where='is_free', args='false', page=1, page_size=5)
             new_courses = self.order_list('courses', ('course_id', 'name', 'degree', 'study_num','img_url', 'price'),
@@ -30,7 +30,7 @@ class MineDao(BaseDao):
             raise Exception({'code': 201, 'msg': e})
 
         return {
-                "main_banner_data": main_banner_data,
+                "balance": balance,
                 "combat_courses": combat_courses,
                 "new_courses": new_courses,
                 "free_courses": free_courses,
