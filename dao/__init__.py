@@ -5,7 +5,6 @@ from logger import api_logger
 
 DB_CONFIG = {
     "port": 3306,
-    
     "host": "121.199.63.71",
     "user": "ygadmin",
     "password": "yg1176",
