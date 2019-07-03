@@ -20,7 +20,6 @@ class UserDao(BaseDao):
     def user_update(self, key, value, where, args):
         api_logger.info('db update users')
         value = make_password(value) if key == 'u_auth_string' else value
-        print(value,"这个value 是什么?")
         return super(UserDao, self).update('users', key,value, where, args)
 
     def check_login_phone(self, u_phone):
@@ -45,9 +44,7 @@ class UserDao(BaseDao):
         user_profile = self.query(sql, u_phone)
         id, auth_str = (user_profile[0].get('id'),
                         user_profile[0].get('u_auth_string'))
-        print(id,auth_str,"@!#!@#")
         if check_password(u_auth_string, auth_str):
-            print(user_profile)
             return user_profile
         api_logger.warn('用户 %s 的口令不正确' % u_phone)
         return [{'code': '303',
