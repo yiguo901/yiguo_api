@@ -13,7 +13,7 @@ class home_dao(BaseDao):
 		return data
 		
 	def query_all(self, table):
-		sql = 'select * from %s' %(table)
+		sql = 'select * from %s limit 4' %(table)
 		with self.db as c:
 			c.execute(sql)
 			data = c.fetchall()

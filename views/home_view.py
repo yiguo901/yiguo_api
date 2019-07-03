@@ -92,6 +92,7 @@ def detail_img_view(id):
 @blue_home.route('/type/list/<category_id>/', methods=("GET",))
 def type_view(category_id):
 	#商品分类
+	#1001
 	dao = home_dao()
 	#查询大类商品
 	category_datas = dao.query_category()
@@ -164,11 +165,14 @@ def new_view():
 	dao = home_dao()
 	datas = dao.query_type_detail_all(('id','name','detail_name','price','goods_img')
 	                          ,name='is_chosen',id='1')
+	l = int(len(datas) / 2)
+	
 		
 	return jsonify({
 		'code': 200,
 		'msg': 'ok',
-		'datas':datas
+		'datas':datas[:l],
+		'datas_o':datas[l:]
 	})
 
 
@@ -177,9 +181,33 @@ def new_view():
 def hot_view():
 	dao = home_dao()
 	datas = dao.hot_query(('id','name','detail_name','price','goods_img'))
+	l = int(len(datas)/2)
+	print(l)
+	print(datas[:l])
 
 	return jsonify({
 		'code': 200,
 		'msg': 'ok',
-		'datas':datas
+		'datas':datas[:l],
+		'datas_o':datas[l:]
+	})
+
+
+@blue_home.route('/home/nav/<string:category_id>/<string:id>/',methods=("GET",))
+def nav_view(id,category_id):
+	
+	dao = home_dao()
+	if id == '0':
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='category_id', name=category_id, type='sale')
+	elif id == '1':
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='category_id', name=category_id, type='is_chosen')
+	else:
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='category_id', name=category_id, type='price')
+	return jsonify({
+		'code': 200,
+		'msg': 'ok',
+		'datas':type_detail
 	})

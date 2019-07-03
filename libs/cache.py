@@ -22,5 +22,5 @@ def get_token_user_id(token):
         return rd.get(token).decode()
 
 if __name__ == '__main__':
-    user_id = get_token_user_id('15428481e8464f18858e469f9b2691b9')
+    user_id = get_token_user_id('cfb113fae31c4d23bd832dc308bde00d')
     print(user_id)
