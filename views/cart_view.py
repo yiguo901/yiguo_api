@@ -68,10 +68,3 @@ def add_cart_view(gid):
 		'msg': '请登录',
 	})
 
-
-if __name__ == '__main__':
-	s = new_token()
-	print(s)
-	save_token(s,1)
-	# token = 0cbca629c7054578b56ec58897807129
-	#userID = 1

@@ -88,47 +88,9 @@ class home_dao(BaseDao):
 			return data
 		
 	def hot_query(self, *fields):
-		sql = 'select {} from goods order by sale '.format(','.join(*fields))
+		sql = 'select {} from goods order by sale limit 20 '.format(','.join(*fields))
 		with self.db as c:
 			c.execute(sql)
 			data = c.fetchall()
 			return data
-
-# # 分类显示
-	# def query_group_all(self, *fields, arg):
-	# 	# 第一个传入元组，第二个传入关键字
-	# 	sql = 'select {} from  goods group by {}'.format(','.join(*fields), arg)
-	# 	print(sql)
-	# 	with self.db as c:
-	# 		c.execute(sql)
-	# 		data = c.fetchall()
-	# 		return data
-	#
-	# def query_type_list(self, *fields, name, id, typeid):
-	# 	sql = 'select {} from  goods where {}={}  group by {}'.format(','.join(*fields), name, id, typeid)
-	# 	with self.db as c:
-	# 		c.execute(sql)
-	# 		data = c.fetchall()
-	# 	return data
-	#
-	# def query_type(self):
-	# 	sql = 'select id,category_name,category_id from goods group by category_id'
-	# 	with self.db as c:
-	# 		c.execute(sql)
-	# 		data = c.fetchall()
-	# 		return data
-	#
-	# def query_type_nav(self, *fields):
-	# 	sql = 'select %s from goods group by category_id' % (','.join(fields))
-	# 	print(sql)
-	# 	with self.db as c:
-	# 		c.execute(sql)
-	# 		data = c.fetchall()
-	# 		return data
-
-# if __name__ == '__main__':
-# 	dao = home_dao()
-# 	type_detail = dao.query_name(('id','name','detail_name','price','marketprice','pro_addr','goods_img')
-# 	               ,name_type='child_name',name='\'苹果\'')
-# 	# home_dao().query_group(1001,('id', ))
 

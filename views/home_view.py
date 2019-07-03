@@ -156,8 +156,9 @@ def free_card_view():
 
 	})
 
-@blue_home.route('/vip/welfare/<string:id>/',methods=("GET",))
+@blue_home.route('/home/welfare/<string:id>/',methods=("GET",))
 def welfare_view(id):
+	#福利页面
 	dao = home_dao()
 	if id == '0':
 		welfare_datas=dao.welfare_query('1003')
@@ -166,6 +167,8 @@ def welfare_view(id):
 		welfare_datas = dao.welfare_query('1006')
 	else:
 		welfare_datas = dao.welfare_query('1008')
+		
+	print(welfare_datas)
 		
 	return jsonify({
 		'code': 200,
