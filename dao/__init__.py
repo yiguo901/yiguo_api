@@ -4,18 +4,18 @@ from logger import api_logger
 
 
 DB_CONFIG = {
-    # "port": 3306,
-    # "host": "121.199.63.71",
-    # "user": "ygadmin",
-    # "password": "yg1176",
-    # "db": "yg_api_db",
-    # "charset": "utf8"
+    "port": 3306,
+    "host": "121.199.63.71",
+    "user": "ygadmin",
+    "password": "yg1176",
+    "db": "yg_api_db",
+    "charset": "utf8"
 
-    "host":"localhost",
-    "user":"root",
-    "password":"123456",
-    "db":"yiguo",
-    "charset":"utf8"
+    # "host":"localhost",
+    # "user":"root",
+    # "password":"123456",
+    # "db":"yiguo",
+    # "charset":"utf8"
 }
 
 

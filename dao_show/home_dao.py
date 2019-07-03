@@ -81,7 +81,7 @@ class home_dao(BaseDao):
 		
 		
 	def welfare_query(self,category_id):
-		sql = 'select id,name,detail_name,goods_img,price from goods where category_id={} limit 4'.format(category_id)
+		sql = 'select id,name,detail_name,goods_img,price from goods where category_id={} limit 2'.format(category_id)
 		with self.db as c:
 			c.execute(sql)
 			data = c.fetchall()

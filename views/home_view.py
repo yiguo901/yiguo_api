@@ -154,8 +154,8 @@ def welfare_view(id):
 	return jsonify({
 		'code': 200,
 		'msg': 'ok',
-		'datas1': welfare_datas[:2],
-		'datas2':welfare_datas[2:]
+		'datas1': welfare_datas[0],
+		'datas2':welfare_datas[1]
 	})
 
 @blue_home.route('/home/new/',methods=("GET",))
