@@ -4,9 +4,7 @@ from flask import request, jsonify
 from cart_dao.cartdao import cart_dao
 from libs.cache import *
 
-
 blue_cart = Blueprint('cart_api', __name__)
-
 
 @blue_cart.route('/cart/show/', methods=('POST',))
 def cart_view():
@@ -18,14 +16,20 @@ def cart_view():
 	if u_id:
 		dao = cart_dao()
 		cart_datas = dao.cart_query(u_id)
+		s = cart_datas[0]['c_goods_id']
+		res = dao.recommend_query(s)[0].get('category_id',None)
+		recommends = dao.recommend_datas(res)
+		#推荐商品
 		for cart_data in cart_datas:
 			g_id = cart_data['c_goods_id']
 			goods_data = dao.query_goods(('id','name','price','goods_img'),id=g_id)
 			cart_data['goods_detail'] = goods_data
+
 		return jsonify({
-			'code': '202',
-			'msg': '请登录',
-			'cart_datas': cart_datas
+			'code': '200',
+			'msg': 'ok',
+			'cart_datas': cart_datas,
+			'recommends':recommends
 		})
 	else:
 		return jsonify({
@@ -38,8 +42,6 @@ def add_cart_view(gid):
 	#商品添加购物车
 	# 获取前端传来的商品id 插入cart表
 	token = request.args.get("token", None)
-	print("*", token)
-
 	if token is None:
 		return jsonify({"code": 201, "msg": "token查询参数必须提供"})
 	u_id = get_token_user_id(token)
@@ -47,9 +49,8 @@ def add_cart_view(gid):
 		dao = cart_dao()
 		status = dao.query_status(gid,u_id)
 		print(u_id,gid)
-		print(status)
 		if not status:
-			cart_datas = dao.add_cart('1', gid, u_id)
+			dao.add_cart('1', gid, u_id)
 			# 购物车数据插入数据库
 			print("插入成功！")
 			return jsonify({
@@ -58,13 +59,13 @@ def add_cart_view(gid):
 			})
 		else:
 			goods_num = status.get('c_goods_num')
-			cart_datas = dao.update_cart(goods_num + 1, gid, u_id)
+			dao.update_cart(goods_num + 1, gid, u_id)
 			return jsonify({
 				'code': 200,
 				'msg': '加入数量成功'
 			})
 	return jsonify({
 		'code': '202',
-		'msg': '请登录',
+		'msg': '请登录'
 	})
 

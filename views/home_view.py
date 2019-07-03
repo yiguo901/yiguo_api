@@ -3,7 +3,6 @@ from flask import request, jsonify
 
 from dao_show.home_dao import home_dao
 from logger import api_logger
-from dao.user_dao import UserDao
 
 blue_home = Blueprint('home_api', __name__)
 
@@ -21,10 +20,7 @@ def home_view():
 	for img_chosen_data in img_chosen_datas:
 		img_chosen_category_id = img_chosen_data['trackid']
 		img_chosen_detail = dao.query_group(img_chosen_category_id,('id','name','detail_name','goods_img','price','marketprice'))
-
 		img_chosen_data['listimg'] = img_chosen_detail
-
-	#################################################
 	other_chosen_datas = dao.query_category()
 	for other_chosen_data in other_chosen_datas:
 		type_id = other_chosen_data['category_id']
@@ -66,7 +62,6 @@ def eat_view():
 	    'msg': 'ok',
 	    'data_wheel': bigimg_eat_datas,
 		'img_eat_datas':img_eat_datas
-	
 	})
 
 @blue_home.route('/detail/<id>/', methods=("GET",))
@@ -94,8 +89,6 @@ def detail_img_view(id):
 	    'data_wheel': detail_datas,
 	})
 
-
-
 @blue_home.route('/type/list/<category_id>/', methods=("GET",))
 def type_view(category_id):
 	#商品分类
@@ -106,13 +99,10 @@ def type_view(category_id):
 		child_datas = dao.query_child(category_datas[0]['category_id'])
 	else:
 		child_datas = dao.query_child(category_id)
-		
-
 
 	return jsonify({
 	    'code': 200,
 	    'msg': 'ok',
-
 	    'type_detail_datas': category_datas,
 		'child_type_datas':child_datas
 	})
@@ -131,9 +121,6 @@ def type_detail_view(child_id,id):
 	else:
 		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
 		                             , name_type='child_id', name=child_id,type='price')
-
-	
-	
 	
 	return jsonify({
 	    'code': 200,
@@ -142,18 +129,15 @@ def type_detail_view(child_id,id):
 
 	})
 
-
 @blue_home.route('/home/card/', methods=("GET",))
 def free_card_view():
 	#home页面的会员页面
-	
 	dao = home_dao()
 	free_cards = dao.query_type_detail_all(('id','child_name','name','detail_name','price','goods_img'),name='category_id',id='2001')
 	return jsonify({
 	    'code': 200,
 	    'msg': 'ok',
 		'img_datas':free_cards
-
 	})
 
 @blue_home.route('/home/welfare/<string:id>/',methods=("GET",))
@@ -162,13 +146,10 @@ def welfare_view(id):
 	dao = home_dao()
 	if id == '0':
 		welfare_datas=dao.welfare_query('1003')
-		print(welfare_datas)
 	elif id == '1':
 		welfare_datas = dao.welfare_query('1006')
 	else:
 		welfare_datas = dao.welfare_query('1008')
-		
-	print(welfare_datas)
 		
 	return jsonify({
 		'code': 200,
@@ -177,21 +158,17 @@ def welfare_view(id):
 		'datas2':welfare_datas[2:]
 	})
 
-
-
 @blue_home.route('/home/new/',methods=("GET",))
 def new_view():
 	#新品上市
 	dao = home_dao()
 	datas = dao.query_type_detail_all(('id','name','detail_name','price','goods_img')
 	                          ,name='is_chosen',id='1')
-	
 		
 	return jsonify({
 		'code': 200,
 		'msg': 'ok',
 		'datas':datas
-
 	})
 
 
@@ -205,5 +182,4 @@ def hot_view():
 		'code': 200,
 		'msg': 'ok',
 		'datas':datas
-
 	})
