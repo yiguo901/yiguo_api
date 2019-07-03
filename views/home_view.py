@@ -17,41 +17,38 @@ def home_view():
 	img_nav_datas = dao.query_all('nav')
 	#查询选择列表的数据
 	
-	img_chosen_datas = dao.query_all('chosen')
+	img_chosen_datas = dao.query_all_limit('chosen')
 	for img_chosen_data in img_chosen_datas:
 		img_chosen_category_id = img_chosen_data['trackid']
-		print(img_chosen_category_id)
 		img_chosen_detail = dao.query_group(img_chosen_category_id,('id','name','detail_name','goods_img','price','marketprice'))
 
 		img_chosen_data['listimg'] = img_chosen_detail
 
-	img_chosen_otherdatas = dao.query_type_nav('id','category_name','category_id')
-	print(img_chosen_otherdatas)
-
-	for img_chosen_otherdata in img_chosen_otherdatas:
-
-		img_chosen_categoryid = img_chosen_otherdata['category_id']
-		img_chosens = dao.query_group(img_chosen_categoryid,('id','name','detail_name','goods_img','price'))
-		img_chosen_otherdata['imglist'] = img_chosens
+	#################################################
+	other_chosen_datas = dao.query_category()
+	for other_chosen_data in other_chosen_datas:
+		type_id = other_chosen_data['category_id']
+		img_chosens = dao.query_group(type_id,('id','name','detail_name','goods_img','price','marketprice'))
+		other_chosen_data['imglist'] = img_chosens
 
 	return jsonify({
-		'code': 8000,
+		'code': 200,
 		'msg': 'ok',
 		'data_wheel': img_wheel_datas,
 		'data_nav': img_nav_datas,
-		'data_chosen': img_chosen_datas,
-		'img_chosen_otherdata':img_chosen_otherdatas
-		
+		'data_chosen': img_chosen_datas,  #4条数据
+		'img_chosen_otherdata':other_chosen_datas  # 12个分类
+
 	})
 
-@blue_home.route('/home/index/<category_id>/', methods=("GET",))
+@blue_home.route('/home/index/nav/<category_id>/', methods=("GET",))
 #导航类列表表详情
 def nav_list_view(category_id):
 	dao = home_dao()
-	nav_datas = dao.query_group(category_id,('name','detail_name','price','marketprice','goods_img'))
+	nav_datas = dao.query_category_nav(('id','name','detail_name','price','marketprice','goods_img'),category_id=category_id)
 
 	return jsonify({
-	    'code': 8000,
+	    'code': 200,
 	    'msg': 'ok',
 	    'data_nav': nav_datas,
 	
@@ -65,7 +62,7 @@ def eat_view():
 	img_eat_datas = dao.query_eat_limit()
 	
 	return jsonify({
-	    'code': 8000,
+	    'code': 200,
 	    'msg': 'ok',
 	    'data_wheel': bigimg_eat_datas,
 		'img_eat_datas':img_eat_datas
@@ -77,10 +74,10 @@ def eat_view():
 def detail_view(id):
 	dao = home_dao()
 	detail_datas = dao.query_detail(('id', 'name', 'detail_name', 'price', 'marketprice',
-	                                 'child_id', 'pro_addr'),detail_id=id)
+	                                 'child_id', 'pro_addr','goods_img'),detail_id=id)
 	
 	return jsonify({
-	    'code': 8000,
+	    'code': 200,
 	    'msg': 'ok',
 	    'data_wheel': detail_datas
 	})
@@ -92,50 +89,118 @@ def detail_img_view(id):
 	detail_datas = dao.query_detail(('id', 'detail_img_url'), detail_id=id)
 	
 	return jsonify({
-	    'code': 8000,
+	    'code': 200,
 	    'msg': 'ok',
 	    'data_wheel': detail_datas,
 	})
+
 
 
 @blue_home.route('/type/list/<category_id>/', methods=("GET",))
 def type_view(category_id):
 	#商品分类
 	dao = home_dao()
-	type_detail_datas = dao.query_group_all(('id','category_name','child_id','category_id'),arg='category_id')
-	
-	#获取category_id 分组查询
-	if category_id == type_detail_datas[0]['category_id']:
-		child_type_detail = dao.query_type_list(('id','child_id','category_id','child_name'),name='category_id',
-	                                        id=type_detail_datas[0]['category_id'], typeid='child_name' )
+	#查询大类商品
+	category_datas = dao.query_category()
+	if category_id == category_datas[0]['category_id']:
+		child_datas = dao.query_child(category_datas[0]['category_id'])
 	else:
-		child_type_detail = dao.query_type_list(('id', 'child_id', 'category_id','goods_img','child_name'), name='category_id',
-		                                        id=category_id, typeid='child_name')
+		child_datas = dao.query_child(category_id)
 		
-	
+
 
 	return jsonify({
-	    'code': 8000,
+	    'code': 200,
 	    'msg': 'ok',
 
-	    'type_detail_datas': type_detail_datas,
-		'child_type_detail':child_type_detail
+	    'type_detail_datas': category_datas,
+		'child_type_datas':child_datas
 	})
 
-@blue_home.route('/type/list/child/<child_id>/', methods=("GET",))
-	#传入商品的名字 child_id
-def type_detail_view(child_id):
+@blue_home.route('/type/list/child/<child_id>/<string:id>/', methods=("GET",))
+	#二级分类，传入商品的名字 child_id
+def type_detail_view(child_id,id):
+	#id=0 销量排序 id=1 新品排序 id=2价格排序
 	dao = home_dao()
-	type_detail = dao.query_name(('id','name','detail_name','price','marketprice','pro_addr','goods_img')
-	               ,name_type='child_id',name=child_id)
+	if id == '0':
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='child_id', name=child_id, type='sale')
+	elif id == '1':
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='child_id', name=child_id,type='sale')
+	else:
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='child_id', name=child_id,type='price')
+
+	
+	
+	
 	return jsonify({
-	    'code': 8000,
+	    'code': 200,
 	    'msg': 'ok',
 		'type_detail':type_detail
 
 	})
 
+
+@blue_home.route('/home/card/', methods=("GET",))
+def free_card_view():
+	#home页面的会员页面
 	
+	dao = home_dao()
+	free_cards = dao.query_type_detail_all(('id','child_name','name','detail_name','price','goods_img'),name='category_id',id='2001')
+	return jsonify({
+	    'code': 200,
+	    'msg': 'ok',
+		'img_datas':free_cards
+
+	})
+
+@blue_home.route('/vip/welfare/<string:id>/',methods=("GET",))
+def welfare_view(id):
+	dao = home_dao()
+	if id == '0':
+		welfare_datas=dao.welfare_query('1003')
+		print(welfare_datas)
+	elif id == '1':
+		welfare_datas = dao.welfare_query('1006')
+	else:
+		welfare_datas = dao.welfare_query('1008')
+		
+	return jsonify({
+		'code': 200,
+		'msg': 'ok',
+		'datas1': welfare_datas[:2],
+		'datas2':welfare_datas[2:]
+	})
 
 
+
+@blue_home.route('/home/new/',methods=("GET",))
+def new_view():
+	#新品上市
+	dao = home_dao()
+	datas = dao.query_type_detail_all(('id','name','detail_name','price','goods_img')
+	                          ,name='is_chosen',id='1')
 	
+		
+	return jsonify({
+		'code': 200,
+		'msg': 'ok',
+		'datas':datas
+
+	})
+
+
+@blue_home.route('/home/hot/',methods=("GET",))
+#人气美食
+def hot_view():
+	dao = home_dao()
+	datas = dao.hot_query(('id','name','detail_name','price','goods_img'))
+
+	return jsonify({
+		'code': 200,
+		'msg': 'ok',
+		'datas':datas
+
+	})

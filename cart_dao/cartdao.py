@@ -12,12 +12,13 @@ class cart_dao(BaseDao):
             data = c.fetchall()
         return data
     
-    def query_status(self,id,u_id):
+    def query_status(self,gid,u_id):
 
-        sql = 'select c_goods_num from cart where c_goods_id={} and c_user_id={} limit 1'.format(id,u_id)
+        sql = 'select * from cart where c_goods_id={} and c_user_id={}'.format(gid,u_id)
         with self.db as c:
             c.execute(sql)
-            data = c.fetchall()
+            data = c.fetchone()
+            print(data)
         if data:
             return data
         else:
@@ -80,6 +81,14 @@ class cart_dao(BaseDao):
             data = c.fetchone()
         return True
         
+    def cart_query(self,  c_user_id):
+        sql = 'select id,c_goods_num,c_goods_id,c_user_id from cart where c_user_id={}'.format(c_user_id)
+        print(sql)
+        with self.db as c:
+            c.execute(sql)
+            data = c.fetchall()
+        return data
+
         
 
         
