@@ -117,12 +117,24 @@ def type_view(category_id):
 		'child_type_datas':child_datas
 	})
 
-@blue_home.route('/type/list/child/<child_id>/', methods=("GET",))
-	#传入商品的名字 child_id
-def type_detail_view(child_id):
+@blue_home.route('/type/list/child/<child_id>/<string:id>/', methods=("GET",))
+	#二级分类，传入商品的名字 child_id
+def type_detail_view(child_id,id):
+	#id=0 销量排序 id=1 新品排序 id=2价格排序
 	dao = home_dao()
-	type_detail = dao.query_name(('id','name','detail_name','price','marketprice','pro_addr','goods_img')
-	               ,name_type='child_id',name=child_id)
+	if id == '0':
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='child_id', name=child_id, type='sale')
+	elif id == '1':
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='child_id', name=child_id,type='sale')
+	else:
+		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
+		                             , name_type='child_id', name=child_id,type='price')
+
+	
+	
+	
 	return jsonify({
 	    'code': 200,
 	    'msg': 'ok',
