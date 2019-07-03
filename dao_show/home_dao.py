@@ -14,14 +14,18 @@ class home_dao(BaseDao):
 		
 	def query_all(self, table):
 		sql = 'select * from %s' %(table)
-		
-		print(sql)
+		with self.db as c:
+			c.execute(sql)
+			data = c.fetchall()
+			return data
+	def query_all_limit(self, table):
+		sql = 'select * from %s limit 4' %(table)
 		with self.db as c:
 			c.execute(sql)
 			data = c.fetchall()
 			return data
 
-	def query_group(self, child_id,*fields, page=8):
+	def query_group(self, child_id,*fields, page=4):
 
 		sql = 'select {} from goods where category_id={} limit {}'.format(','.join(*fields), child_id,page)
 		with self.db as c:
@@ -74,21 +78,23 @@ class home_dao(BaseDao):
 			c.execute(sql)
 			data = c.fetchall()
 			return data
+		
+		
+	def welfare_query(self,category_id):
+		sql = 'select id,name,detail_name,goods_img,price from goods where category_id={} limit 4'.format(category_id)
+		with self.db as c:
+			c.execute(sql)
+			data = c.fetchall()
+			return data
+		
+	def hot_query(self, *fields):
+		sql = 'select {} from goods order by sale '.format(','.join(*fields))
+		with self.db as c:
+			c.execute(sql)
+			data = c.fetchall()
+			return data
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	# # 分类显示
+# # 分类显示
 	# def query_group_all(self, *fields, arg):
 	# 	# 第一个传入元组，第二个传入关键字
 	# 	sql = 'select {} from  goods group by {}'.format(','.join(*fields), arg)

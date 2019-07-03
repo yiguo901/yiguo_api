@@ -9,66 +9,64 @@ blue_cart = Blueprint('cart_api', __name__)
 
 
 @blue_cart.route('/cart/show/', methods=('POST',))
-#临时购物车数据
+#将前段的购物车数据插入cart表
 def cart_view():
-	token = request.args.get("token",None)
-	cart_datas = request.get_json().get('data')
-	print("*",token)
-	"""
-				{
-				"total_price":100,
-				"data":[
-					{
-					"goods_num":1,
-					"goods_id":1
-				},
-				{
-					"goods_num":2,
-					"goods_id":3
-				}
-				]
-			}
-	"""
+	token = request.args.get("token", None)
 	#获取前端传来的cart临时数据json
 	if token is None:
 		return jsonify({"code": 201, "msg": "token查询参数必须提供"})
 	u_id = get_token_user_id(token)
 	if u_id:
 		dao = cart_dao()
+		cart_datas = dao.cart_query(u_id)
 		for cart_data in cart_datas:
-			
-			g_num = cart_data.get('goods_num')
-			g_id = cart_data.get('goods_id')
-			status = dao.query_status(u_id, g_id)
-			stock = dao.query_stock(g_id)
-			print('!!!!!!', status)
-			if not status:
-				cart_datas = dao.add_cart(g_num, g_id, u_id)
-				# 购物车数据插入数据库
-				print("插入成功！")
-				return jsonify({
-					'code': 8000,
-					'msg': '插入成功'
-				})
-				
-			else:
-				goods_num = status[0].get('c_goods_num')
-				if stock:
-					cart_datas = dao.update_cart(goods_num + 1, id, u_id)
-					return jsonify({
-						'code': 8000,
-						'msg': '加入数量成功'
-					})
-				else:
-					return jsonify({
-						'code': 8001,
-						'msg': '库存不足！'
-					})
+			g_id = cart_data['c_goods_id']
+			goods_data = dao.query_goods(('id','name','price','goods_img'),id=g_id)
+			cart_data['goods_detail'] = goods_data
 		return jsonify({
 			'code': '202',
 			'msg': '请登录',
+			'cart_datas': cart_datas
 		})
-	
+	else:
+		return jsonify({
+			'code': '202',
+			'msg': '请登录'
+		})
+
+@blue_cart.route('/cart/add/<string:gid>/', methods=('POST',))
+def add_cart_view(gid):
+	token = request.args.get("token", None)
+	print("*", token)
+	# 获取前端传来的商品id 插入cart表
+	if token is None:
+		return jsonify({"code": 201, "msg": "token查询参数必须提供"})
+	u_id = get_token_user_id(token)
+	if u_id:
+		dao = cart_dao()
+		status = dao.query_status(gid,u_id)
+		print(u_id,gid)
+		print(status)
+		if not status:
+			cart_datas = dao.add_cart('1', gid, u_id)
+			# 购物车数据插入数据库
+			print("插入成功！")
+			return jsonify({
+				'code': 200,
+				'msg': '插入成功'
+			})
+		else:
+			goods_num = status.get('c_goods_num')
+			cart_datas = dao.update_cart(goods_num + 1, gid, u_id)
+			return jsonify({
+				'code': 200,
+				'msg': '加入数量成功'
+			})
+	return jsonify({
+		'code': '202',
+		'msg': '请登录',
+	})
+
 
 if __name__ == '__main__':
 	s = new_token()
