@@ -9,10 +9,9 @@ blue_cart = Blueprint('cart_api', __name__)
 
 
 @blue_cart.route('/cart/show/', methods=('POST',))
-#将前段的购物车数据插入cart表
 def cart_view():
+	#将用某用户购物车的信息展示给前端
 	token = request.args.get("token", None)
-	#获取前端传来的cart临时数据json
 	if token is None:
 		return jsonify({"code": 201, "msg": "token查询参数必须提供"})
 	u_id = get_token_user_id(token)
@@ -36,9 +35,11 @@ def cart_view():
 
 @blue_cart.route('/cart/add/<string:gid>/', methods=('POST',))
 def add_cart_view(gid):
+	#商品添加购物车
+	# 获取前端传来的商品id 插入cart表
 	token = request.args.get("token", None)
 	print("*", token)
-	# 获取前端传来的商品id 插入cart表
+
 	if token is None:
 		return jsonify({"code": 201, "msg": "token查询参数必须提供"})
 	u_id = get_token_user_id(token)
