@@ -79,3 +79,42 @@ def add_cart_view(gid):
 		'msg': '请登录'
 	})
 
+
+
+@blue_cart.route('/add/address/', methods=('POST',))
+def address_view():
+	#新增收货地址
+	resps = request.get_json().get('data',None)
+	print(resps)
+	token = request.args.get("token", None)
+	if token is None:
+		return jsonify({"code": 201, "msg": "token查询参数必须提供"})
+	u_id = get_token_user_id(token)
+	print(u_id)
+	if u_id:
+	#resp 为一个列表
+		if not resps:
+			return jsonify({
+				'code': '202',
+				'msg': '参数error'
+			})
+		else:
+			addr = ','.join([','.join(i.values()) for i in resps])
+			result = addr + ',' + str(u_id)
+			#tom,123456789,西安市#高新区#高新6路,0,1
+
+			print(result)
+			#插入数据address表
+			return jsonify({
+				'code': '200',
+				'msg': '更新地址成功！'
+			})
+	else:
+		return jsonify({
+			'code': '202',
+			'msg': 'token不正确'
+		})
+
+
+	
+	

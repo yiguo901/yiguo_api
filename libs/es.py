@@ -5,19 +5,15 @@ import requests
 import pymysql
 from pymysql.cursors import DictCursor
 
-from dao import DB
-
 
 class ESearch():
     def __init__(self, index):
         self.host = '121.199.63.71'
-        self.port = '9200'
+        self.port = '9203'
         self.index = index
 
     def create_index(self):
         url = f'http://{self.host}:{self.port}/{self.index}'
-        # ES基于json数据进行交互的，所以上传数据必须是json格式的数据
-        # resp是请求响应对象， 通过resp.json()获取响应的json数据
         resp = requests.put(url, json={
             "settings": {
                 "number_of_shards": 5,
@@ -32,7 +28,7 @@ class ESearch():
     def remove_index(self):
         url = f'http://{self.host}:{self.port}/{self.index}'
         requests.delete(url)
-
+        print('删除成功!')
 
     def add_doc(self, doc_type, id=None, **values):
         url = f'http://{self.host}:{self.port}/{self.index}/{doc_type}/'
@@ -65,35 +61,40 @@ class ESearch():
 def init_index():
 
     # 连接数据库，将doctors表数据添加到索引库中
-    db = pymysql.Connect(host="121.199.63.71",
+    db = pymysql.Connect(host="localhost",
                          port=3306,
-                         user='yladmin',
-                         password='yl123',
-                         db='yl_api_db',charset='utf8')
+                         user='root',
+                         password='123456',
+                         db='yiguo',charset='utf8')
     with db.cursor(cursor=DictCursor) as c:
-        c.execute('select id, doc_name, doc_title, doc_img, doc_exp from doctors')
+        c.execute('select category_id, category_name, child_id,child_name from goods')
 
-        es_ = ESearch('ylindex')
-        es_.remove_index()
+        es_ = ESearch('ygindex')
+        # es_.remove_index()
         es_.create_index()
         for row_data in c.fetchall():
             print(row_data)
-            es_.add_doc('doctor', **row_data)
+            es_.add_doc('goods', **row_data)
 
-        print('--init add doctor doc_type all ok--')
+        print('--init add goods doc_type all ok--')
+
+# def init_index():
+#     db = DB()
+#     with db.conn.cursor(cursor=DictCursor) as c:
+#         c.execute('select id,child_name from goods')
+#         es_ = ESearch('ygindex')
+#         for row_data in c.fetchall():
+#             es_.add_doc('goods', **row_data)
+#         print('___init add goods doc_type all ok!')
 
 
 if __name__ == '__main__':
-    # search = ESearch('ylindex')
-    # # search.create_index()
-    # doc = {
-    #     "name": "头痛3",
-    #     "yl": "高新医院3",
-    #     "phone": "17791692054"
-    # }
-    # # search.add_doc('bzdoc', 1, **doc)
-    # # search.add_doc('bzdoc', 3, **doc)
-    # print(search.query('17791692054'))
+
+    # search = ESearch('ygindex')
+    # print(search.query('苹果'))
     # init_index()
-    search = ESearch('ylindex')
-    print(search.query('静'))
+    # search.remove_index()
+    # serarch = ESearch('ygindex')
+    # print(serarch.query('苹果'))
+    # search.remove_index()
+    init_index()
