@@ -68,7 +68,7 @@ def eat_view():
 def detail_view(id):
 	dao = home_dao()
 	detail_datas = dao.query_detail(('id', 'name', 'detail_name', 'price', 'marketprice',
-	                                 'child_id', 'pro_addr','goods_img'),detail_id=id)
+	                                 'child_id', 'pro_addr','goods_wheel_img'),detail_id=id)
 	
 	return jsonify({
 	    'code': 200,
@@ -117,7 +117,7 @@ def type_detail_view(child_id,id):
 		                             , name_type='child_id', name=child_id, type='sale')
 	elif id == '1':
 		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
-		                             , name_type='child_id', name=child_id,type='sale')
+		                             , name_type='child_id', name=child_id,type='stock')
 	else:
 		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
 		                             , name_type='child_id', name=child_id,type='price')

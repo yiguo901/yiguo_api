@@ -50,7 +50,7 @@ class home_dao(BaseDao):
 		
 	def query_name(self, *fields,name_type,name,type):
 		#二级分类
-		sql = 'select {} from goods where {}={} order by {}'.format(','.join(*fields), name_type, name,type)
+		sql = 'select {} from goods where {}={} and id <382 order by {} '.format(','.join(*fields), name_type, name,type)
 		print(sql)
 		with self.db as c:
 			c.execute(sql)

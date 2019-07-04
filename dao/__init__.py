@@ -69,13 +69,11 @@ class BaseDao():
             api_logger.info('select %s ok!' % sql)
             return result
 
-    
-    
+      
     def query(self, sql, *args):
         with self.db as c:
             c.execute(sql, args=args)
             data = c.fetchall()
             if data:
                 data = list(data)
-
         return data
