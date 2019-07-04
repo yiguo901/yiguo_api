@@ -3,9 +3,7 @@ from logger import api_logger
 
 
 class MineDao(BaseDao):
-
-
-
+    
     def mine_query(self,user_id):
         try:
             # 余额
@@ -23,10 +21,6 @@ class MineDao(BaseDao):
         #   全部订单
             all_orders = self.list('orders', ('o_user_id', 'o_time', 'o_price'),
                                  where='o_status', page=1, page_size=5)
-
-
-        #
-
         except Exception as e:
             raise Exception({'code': 201, 'msg': e})
 
@@ -37,6 +31,25 @@ class MineDao(BaseDao):
             "to_be_evaluated": to_be_evaluated,
             "all_orders": all_orders
         }
+    
+    def query_balance(self, user_id):
+        sql = 'select balance from users where id=%s limit 1'
+        order_list = self.query(sql, user_id)
+        if not order_list:
+            return 0
+        else:
+         return order_list[0]['balance']
+        
+
+    def add_balance(self, balance, u_id):
+        sql = 'update users set balance={} where id={}'.format(balance, u_id)
+        with self.db as c:
+            c.execute(sql)
+            data = c.fetchall()
+            return data
 
 if __name__ == '__main__':
-    MineDao().mine_query()
+    dao = MineDao()
+    s = {'id':'1','balance': '100','is_active':'1','is_delete':'0'}
+    r = dao.add_balance(**s)
+    

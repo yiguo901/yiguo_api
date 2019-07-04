@@ -79,3 +79,5 @@ def add_cart_view(gid):
 		'msg': '请登录'
 	})
 
+
+

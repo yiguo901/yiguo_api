@@ -22,5 +22,7 @@ def get_token_user_id(token):
         return rd.get(token).decode()
 
 if __name__ == '__main__':
-    user_id = get_token_user_id('cfb113fae31c4d23bd832dc308bde00d')
-    print(user_id)
+    s = new_token()
+    print(s)
+    save_token(s, 1)
+    print(rd.keys())

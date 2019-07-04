@@ -2,7 +2,6 @@ from flask import Blueprint
 from flask import request, jsonify
 
 from dao_show.home_dao import home_dao
-from logger import api_logger
 
 blue_home = Blueprint('home_api', __name__)
 
@@ -69,7 +68,7 @@ def eat_view():
 def detail_view(id):
 	dao = home_dao()
 	detail_datas = dao.query_detail(('id', 'name', 'detail_name', 'price', 'marketprice',
-	                                 'child_id', 'pro_addr','goods_img'),detail_id=id)
+	                                 'child_id', 'pro_addr','goods_wheel_img'),detail_id=id)
 	
 	return jsonify({
 	    'code': 200,
@@ -118,7 +117,7 @@ def type_detail_view(child_id,id):
 		                             , name_type='child_id', name=child_id, type='sale')
 	elif id == '1':
 		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
-		                             , name_type='child_id', name=child_id,type='sale')
+		                             , name_type='child_id', name=child_id,type='stock')
 	else:
 		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
 		                             , name_type='child_id', name=child_id,type='price')
@@ -181,22 +180,25 @@ def new_view():
 def hot_view():
 	dao = home_dao()
 	datas = dao.hot_query(('id','name','detail_name','price','goods_img'))
-	l = int(len(datas)/2)
-	print(l)
-	print(datas[:l])
 
 	return jsonify({
 		'code': 200,
 		'msg': 'ok',
-		'datas':datas[:l],
-		'datas_o':datas[l:]
+		'datas':datas[:6],
+		'datas_o':datas[6:]
 	})
 
 
 @blue_home.route('/home/nav/<string:category_id>/<string:id>/',methods=("GET",))
 def nav_view(id,category_id):
+	#/ home / nav / < string: category_id > /
+	#/home/nav/<string:category_id>/?id=1
+	#/home/nav/<string:category_id>/?id=2
 	
 	dao = home_dao()
+	#当id=0 按销量排序
+	#当id=1 按精选排序
+	#其他按价格排序
 	if id == '0':
 		type_detail = dao.query_name(('id', 'name', 'detail_name', 'price', 'marketprice', 'pro_addr', 'goods_img')
 		                             , name_type='category_id', name=category_id, type='sale')
