@@ -6,7 +6,6 @@ certifi==2019.6.16
 chardet==3.0.4
 Click==7.0
 crcmod==1.7
-Django==2.0.6
 Flask==1.0.3
 flask-blueprint==1.2.7
 Flask-Cors==3.0.8

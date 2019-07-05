@@ -4,13 +4,13 @@ import uuid
 
 from flask import Blueprint, request, jsonify
 from libs import rd, cache, oss
-from dao_user.user_dao import UserDao
+from dao.user_dao import UserDao
 from libs.cache import get_token_user_id
 from libs.crypt import make_password
 from logger import api_logger
 from libs.sms import send_sms_code
 from werkzeug.datastructures import FileStorage
-from dao_user.phone_dao import PhoneDao
+from dao.phone_dao import PhoneDao
 
 blue = Blueprint("userblue", __name__)
 

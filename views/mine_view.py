@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 
-from dao_user.mine_dao import MineDao
+from dao.mine_dao import MineDao
 from libs import cache
 from libs.cache import get_token_user_id
 
@@ -26,6 +26,7 @@ def oders():
         'msg': '请求数据失败',
     })
 
+
 @mine_blue.route("/add/money/", methods=("POST",))
 def add_view():
     token = request.args.get("token", None)
@@ -39,13 +40,5 @@ def add_view():
     bal = dao.query_balance(u_id)
     num = int(bal) + int(num_money)
 
-    dao.add_balance(num,u_id)
-    return jsonify({"code": 200, "msg": "充值成功！","data":num})
-    
-    
-    
-    
-    
-    
-    
-    
+    dao.add_balance(num, u_id)
+    return jsonify({"code": 200, "msg": "充值成功！", "data": num})

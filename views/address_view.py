@@ -26,13 +26,14 @@ def address_query():
         'msg': '请求数据失败',
     })
 
+
 @blue_addr.route('/address/add/', methods=('POST',))
 def address_view():
     # 新增收货地址
     # [{'name:'tom'},{'phone_num':'18333332222'},{'address_details':'陕西省西安市雁塔区玫瑰公馆'},
     # {'addr_type':'0'}]
     data = request.get_json().get('data', None)
-    addr_data = { key:value for d in data for key, value in d.items()}
+    addr_data = {key: value for d in data for key, value in d.items()}
     token = request.args.get("token", None)
     if token is None:
         return jsonify({"code": 201, "msg": "token查询参数必须提供"})
@@ -61,6 +62,7 @@ def address_view():
             'msg': 'token不正确'
         })
 
+
 @blue_addr.route("/address/edit/", methods=('POST',))
 def edit():
     resp = request.get_json()
@@ -68,7 +70,7 @@ def edit():
         id = resp.get('id')
         dao = AddressDao()
         data = dao.address_edit_query(id)
-        if id :
+        if id:
             return jsonify({
                 'code': 200,
                 'msg': 'ok',
@@ -82,6 +84,7 @@ def edit():
             'code': 202,
             'msg': '需要一个地址id',
         })
+
 
 @blue_addr.route('/address/delete/', methods=('POST',))
 def address_delete():
@@ -103,11 +106,11 @@ def address_delete():
             # 插入数据address表
             dao = AddressDao()
             dao.delete_address(data_id, u_id)
-
-
-
-
-
-
-
-
+            return ({
+                'code': 200,
+                'msg': '地址删除成功!'
+            })
+    return ({
+        'code': 300,
+        'msg': '地址ID必须存在'
+    })
