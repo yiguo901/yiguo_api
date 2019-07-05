@@ -5,9 +5,8 @@ from flask import Blueprint
 from flask import request, jsonify
 
 from dao.order_dao import Order_Dao
-from dao_user.user_dao import UserDao
-from libs import cache, rd
-from libs.cache import check_token, get_token_user_id
+
+from libs import cache
 
 blue_order = Blueprint('order_api', __name__)
 
