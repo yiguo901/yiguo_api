@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import request, jsonify
 
-from cart_dao.cartdao import cart_dao
+from dao.cartdao import cart_dao
 from libs.cache import *
 
 blue_cart = Blueprint('cart_api', __name__)

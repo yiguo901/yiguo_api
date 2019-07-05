@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import request, jsonify
 
-from dao_show.home_dao import home_dao
+from dao.home_dao import home_dao
 
 blue_home = Blueprint('home_api', __name__)
 
