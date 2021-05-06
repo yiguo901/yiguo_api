@@ -8,7 +8,7 @@ Click==7.0
 crcmod==1.7
 Flask==1.0.3
 flask-blueprint==1.2.7
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-RESTful==0.3.7
 idna==2.8
 itsdangerous==1.1.0
